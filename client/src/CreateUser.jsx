@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function CreateUser() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [age, setAge] = useState('');
+  const navigate = useNavigate()
 
   const Submit = (e) => {
     e.preventDefault();
@@ -12,6 +14,7 @@ function CreateUser() {
       .then(result => {
         console.log("User created:", result.data);
         alert("User added successfully!");
+        navigate('/')
       })
       .catch(err => console.error("Error creating user:", err));
   };
