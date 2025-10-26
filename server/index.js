@@ -23,6 +23,14 @@ app.post("/createUser", (req, res) => {
     .catch(err => res.status(500).json(err));
 });
 
+// ✅ NEW: Update user by ID
+app.put("/updateUser/:id", (req, res) => {
+  const { id } = req.params;
+  UserModel.findByIdAndUpdate(id, req.body, { new: true })
+    .then(user => res.json(user))
+    .catch(err => res.status(500).json(err));
+});
+
 app.listen(3001, () => {
   console.log("🚀 Server is running on port 3001");
 });
