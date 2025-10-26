@@ -3,35 +3,36 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UpdateUser() {
-  const { id } = useParams(); // get user id from route
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch existing user data to pre-fill form
   useEffect(() => {
     axios.get(`http://localhost:3001/getUser/${id}`)
       .then(result => {
         setName(result.data.name);
         setEmail(result.data.email);
         setAge(result.data.age);
+        setLoading(false);
       })
       .catch(err => console.log("Error loading user:", err));
   }, [id]);
 
-  // Handle update submission
   const handleUpdate = (e) => {
     e.preventDefault();
     axios.put(`http://localhost:3001/updateUser/${id}`, { name, email, age })
-      .then(result => {
-        console.log("User updated:", result.data);
+      .then(() => {
         alert("User updated successfully!");
-        navigate("/"); // Go back to user list
+        navigate("/");
       })
       .catch(err => console.log("Error updating user:", err));
   };
+
+  if (loading) return <h3 className="text-center text-white mt-5">Loading user data...</h3>;
 
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
@@ -59,15 +60,13 @@ function UpdateUser() {
           <div className="mb-2">
             <label>Age</label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success">
-            Update
-          </button>
+          <button type="submit" className="btn btn-success">Update</button>
         </form>
       </div>
     </div>
